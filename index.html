@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Test your YouTube thumbnails on all devices. The ultimate tool for creators to improve CTR.">
+<meta name="keywords" content="YouTube, Thumbnail, Preview, CTR, Design, Tool">
+<meta name="author" content="Thumbnail.tv.br">
+    <title>THUMBNAIL PREVIEWER - YouTube CTR Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { 
+            --bg-color: #0b1120; 
+            --text-color: #ffffff; 
+            --card-bg: #0f172a; 
+            --border-color: #1e293b; 
+        }
+        
+        body { 
+            background-color: var(--bg-color) !important; 
+            color: var(--text-color); 
+            font-family: "Inter", sans-serif; 
+            margin: 0;
+            scroll-behavior: smooth; 
+        }
+
+        /* HEADER PRETO (image_60e319.png) */
+        .header-black {
+            background-color: #000000;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #111;
+        }
+
+        /* COMPONENTES */
+        .yt-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+        .drop-zone { border: 2px dashed #1e293b; background: rgba(15, 23, 42, 0.4); border-radius: 20px; transition: 0.3s; position: relative; }
+        .drop-zone.drag-over { background: rgba(30, 41, 59, 0.8); border-color: #3b82f6; transform: scale(1.02); }
+        .thumb-box { aspect-ratio: 16 / 9; background: #1e293b; background-size: cover; background-position: center; position: relative; border-radius: 8px; overflow: hidden; }
+        .timestamp { position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; padding: 2px 4px; border-radius: 4px; font-size: 11px; }
+        .section-header { border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin: 40px 0 20px; font-size: 1.5rem; font-weight: 800; color: #94a3b8; }
+        .label { color: #64748b; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; display: block; }
+        .custom-input { background: #0f172a; border: 1px solid #1e293b; color: white; border-radius: 8px; padding: 12px; outline: none; }
+
+        /* BANNERS E ADS */
+        .hire-banner { background-color: #1e3a8a; border-radius: 12px; padding: 30px; display: flex; justify-content: space-between; align-items: center; margin: 40px auto 20px; max-width: 1100px; border: 1px solid #2563eb; }
+        .adsense-box { background: rgba(15, 23, 42, 0.6); border: 1px dashed #1e293b; height: 90px; max-width: 1100px; margin: 0 auto 40px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em; border-radius: 12px; }
+
+        /* BOTÃO FLUTUANTE (image_60cfb4.png) */
+        .btn-wa-float {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #22c55e; color: white; padding: 18px 35px; border-radius: 50px;
+            font-weight: 800; text-transform: uppercase; font-size: 12px; z-index: 100;
+            box-shadow: 0 10px 40px rgba(34, 197, 94, 0.3); display: flex; align-items: center; gap: 10px;
+            transition: 0.3s;
+        }
+        .btn-wa-float:hover { transform: translateX(-50%) translateY(-5px); background: #1eb352; }
+
+        /* RODAPÉ E SEO (image_5f8ce0.png) */
+        .seo-footer-container { max-width: 800px; margin: 60px auto; text-align: center; padding: 0 20px; }
+        .seo-text { color: #64748b; line-height: 1.8; font-size: 15px; margin-bottom: 20px; }
+        .legal-links { display: flex; justify-content: center; gap: 20px; margin-top: 10px; }
+        .legal-link { color: #475569; font-size: 11px; font-weight: 700; text-transform: uppercase; transition: 0.2s; }
+        .legal-link:hover { color: white; }
+
+        /* MODAIS */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; padding: 20px; overflow-y: auto; }
+        .modal-content { background: #0f172a; max-width: 800px; margin: 40px auto; padding: 40px; border-radius: 20px; border: 1px solid #1e293b; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <div class="header-black">
+        <div class="flex items-center gap-3">
+            <div class="bg-red-600 w-8 h-8 rounded flex items-center justify-center"><i class="fas fa-play text-white text-xs"></i></div>
+            <span class="text-xl font-black tracking-tighter uppercase">THUMBNAIL<span class="text-red-600">.TV.BR</span></span>
+        </div>
+        <div class="hidden md:block text-[#444] text-[10px] font-black uppercase tracking-[0.4em]">The Ultimate Designer Tester</div>
+    </div>
+
+    <a href="https://wa.me/5562999130268" target="_blank" class="btn-wa-float">
+        <i class="fab fa-whatsapp text-xl"></i>
+        <span>Order Professional Thumbnails</span>
+    </a>
+
+    <header class="p-10 text-center">
+        <h1 class="text-5xl font-black mb-2 tracking-tighter italic uppercase italic">TEST YOUR <span>THUMBNAIL.</span></h1>
+        <p class="text-lg text-slate-400 mb-8">Preview your art across all YouTube dimensions before you publish your video.</p>
+        
+        <div id="dropZone" class="drop-zone max-w-xl mx-auto py-12 cursor-pointer shadow-xl">
+            <p id="dropText" class="text-xl font-bold uppercase italic pointer-events-none">Drop your Thumbnail here (16:9)</p>
+            <input type="file" id="fileInput" class="hidden" accept="image/*">
+        </div>
+        
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+            <input type="text" id="titleInput" placeholder="Video Title..." class="custom-input w-72">
+            <input type="text" id="channelInput" placeholder="Channel Name" class="custom-input w-48">
+        </div>
+    </header>
+
+    <section class="px-6">
+        <div class="hire-banner shadow-2xl">
+            <div>
+                <h2 class="text-2xl font-black italic uppercase italic">Thumbnail not catching attention?</h2>
+                <p class="text-blue-200 text-sm">Professional designers increase your CTR by up to 300%. Elevate your channel.</p>
+            </div>
+            <a href="https://wa.me/5562999130268" target="_blank" class="bg-white text-blue-900 px-6 py-3 rounded-lg font-black uppercase text-sm">Hire Designer</a>
+        </div>
+        <div class="adsense-box">Google AdSense - Auto Placement</div>
+    </section>
+
+    <div id="resultsView"></div>
+
+    <main class="max-w-6xl mx-auto p-6 pb-40">
+        
+        <h2 class="section-header">Web Browser</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div><span class="label">Home Large</span><div class="thumb-box bg-img"><span class="timestamp">10:00</span></div><div class="flex mt-3 gap-3"><div class="w-10 h-10 rounded-full bg-slate-800 shrink-0"></div><div><p class="v-title font-bold text-sm">Video Title</p><p class="text-xs opacity-50 v-channel mt-1">Channel Name</p></div></div></div>
+            <div><span class="label">Home Large</span><div class="thumb-box bg-img"><span class="timestamp">10:00</span></div><div class="flex mt-3 gap-3"><div class="w-10 h-10 rounded-full bg-slate-800 shrink-0"></div><div><p class="v-title font-bold text-sm">Video Title</p><p class="text-xs opacity-50 v-channel mt-1">Channel Name</p></div></div></div>
+            <div><span class="label">Sidebar</span><div class="flex gap-2"><div class="w-40 shrink-0"><div class="thumb-box bg-img shadow-sm"><span class="timestamp">10:00</span></div></div><div><p class="text-sm font-bold v-title line-clamp-2">Video Title</p><p class="text-[11px] opacity-50 mt-1 v-channel">Channel Name</p></div></div></div>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div><span class="label">Channel Page: Large</span><div class="thumb-box bg-img"></div><p class="text-sm font-bold mt-2 v-title">Video Title</p></div>
+            <div><span class="label">Channel Page: Small</span><div class="w-[160px]"><div class="thumb-box bg-img"></div></div><p class="text-xs font-bold mt-2 v-title">Video Title</p></div>
+            <div class="md:col-span-2 adsense-box !m-0 !h-full border-slate-800">Sidebar Ad Slot</div>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div><span class="label">History</span><div class="flex gap-4"><div class="w-52 shrink-0"><div class="thumb-box bg-img"></div></div><div><p class="text-lg font-bold v-title">Video Title</p><p class="text-sm opacity-50 v-channel">Channel Name</p></div></div></div>
+            <div class="flex gap-8">
+                <div><span class="label">Watch Later: Large</span><div class="w-56"><div class="thumb-box bg-img"></div></div></div>
+                <div><span class="label">Watch Later: List</span><div class="flex gap-2 items-center bg-white/5 p-1 rounded"><div class="w-24 shrink-0"><div class="thumb-box bg-img"></div></div><p class="text-xs font-bold v-title line-clamp-1">Video Title</p></div></div>
+            </div>
+        </div>
+
+        <h2 class="section-header">Mobile</h2>
+        <div class="flex flex-col md:flex-row gap-10 items-start">
+            <div class="w-full max-w-[375px] yt-card">
+                <span class="label p-2 bg-slate-900 m-0">Home: Full Width</span><div class="thumb-box bg-img rounded-none"></div><div class="p-4 flex gap-3"><div class="w-10 h-10 rounded-full bg-slate-800"></div><div><p class="font-bold text-sm v-title">Video Title</p><p class="text-[11px] opacity-50 v-channel">Channel</p></div></div>
+            </div>
+            <div class="w-full max-w-[350px]"><span class="label">Column</span><div class="flex gap-3"><div class="w-36 shrink-0"><div class="thumb-box bg-img shadow-sm"></div></div><div class="v-title text-xs font-bold">Video Title</div></div></div>
+        </div>
+
+        <h2 class="section-header">Apple TV</h2>
+        <div class="bg-black/50 p-10 rounded-3xl text-center border border-slate-800">
+            <div class="max-w-xl mx-auto group"><div class="thumb-box bg-img border-4 border-transparent group-hover:border-white transition-all transform group-hover:scale-105 shadow-2xl"></div><p class="mt-6 text-xl font-bold v-title">Video Title</p><p class="text-slate-500 v-channel">Channel Name</p></div>
+        </div>
+
+        <h2 class="section-header">Original Image</h2>
+        <div id="fullSizePreview" class="thumb-box bg-img w-full cursor-zoom-in shadow-lg mb-4"></div>
+        <p class="text-center text-[10px] opacity-50 uppercase font-bold tracking-widest">Click to view in Full Size / 8K</p>
+
+        <div class="seo-footer-container">
+            <p class="seo-text">
+                Your thumbnail is the first thing viewers see. A high Click-Through Rate (CTR) is essential for YouTube algorithm success. By testing your art on our platform, you ensure that your text is readable and your composition is striking on both mobile and desktop screens.
+            </p>
+            <div class="legal-links">
+                <a href="javascript:void(0)" onclick="openModal('privacyModal')" class="legal-link">Privacy Policy</a>
+                <a href="javascript:void(0)" onclick="openModal('termsModal')" class="legal-link">Terms of Service</a>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="p-10 text-center text-slate-700 text-[10px] uppercase font-bold tracking-widest">
+        <p>&copy; 2026 THUMBNAIL.TV.BR</p>
+    </footer>
+
+    <div id="privacyModal" class="modal"><div class="modal-content"><span class="float-right cursor-pointer text-white text-2xl" onclick="closeModal('privacyModal')">&times;</span><h2 class="text-white font-black mb-4 uppercase">Privacy Policy</h2><p>This tool processes images locally in your browser. We do not store or transmit your artwork to any server.</p></div></div>
+    <div id="termsModal" class="modal"><div class="modal-content"><span class="float-right cursor-pointer text-white text-2xl" onclick="closeModal('termsModal')">&times;</span><h2 class="text-white font-black mb-4 uppercase">Terms of Service</h2><p>By using this tool, you agree that we are not responsible for your channel's performance. This is a preview utility only.</p></div></div>
+
+    <script>
+        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+
+        dropZone.onclick = () => fileInput.click();
+        fileInput.onchange = e => handleFile(e.target.files[0]);
+        
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('drag-over'); });
+        dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+
+        function handleFile(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.querySelectorAll('.bg-img').forEach(el => el.style.backgroundImage = `url(${e.target.result})`);
+                    document.getElementById('dropText').innerText = "UPLOADED! ✅";
+                    document.getElementById('resultsView').scrollIntoView({ behavior: 'smooth' });
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('titleInput').oninput = e => { document.querySelectorAll('.v-title').forEach(el => el.innerText = e.target.value || "Video Title"); };
+        document.getElementById('channelInput').oninput = e => { document.querySelectorAll('.v-channel').forEach(el => el.innerText = e.target.value || "Channel Name"); };
+    </script>
+</body>
+</html>
